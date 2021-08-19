@@ -1,5 +1,5 @@
-# The following code was taken from https://github.com/RoheLab
-# (accessed June 7, 2021).
+# The following code was taken from 
+# https://github.com/RoheLab/vsp-paper (accessed June 7, 2021)
 
 # Version 1.0:  January 26, 2020  karlrohe@stat.wisc.edu
 # ------------------------------------------------------------

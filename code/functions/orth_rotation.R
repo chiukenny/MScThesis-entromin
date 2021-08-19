@@ -1,4 +1,5 @@
-# This file implements the following orthogonal rotation methods:
+# This file implements the following orthogonal rotation
+# methods:
 #   1. Varimax
 #   2. Entromin
 #   3. Entromin2 (second-order Entromin approximation)
@@ -6,21 +7,21 @@
 # Both pairwise optimization and gradient projection
 # implementations are available
 
-# Varimax and general rotation procedure code is based on code from
-# https://github.com/RoheLab/vsp-paper
-# -----------------------------------------------------------------
-
+# Varimax and general rotation procedure code is based on
+# code from https://github.com/RoheLab/vsp-paper
+# ---------------------------------------------------------
 
 
 library(rARPACK)
 library(dplyr)
+
 source("functions/rohe2020.R")
 source("functions/util.R")
 
 
 
 # Shared functions
-# ---------------------------
+# ---------------------------------------------------------
 # These functions are intended to be private and not called outside of the file
 
 
@@ -192,7 +193,7 @@ pairwise_gd = function(grad_f, U, eps=1e-5, max_iters=100, verbose=T, ...) {
 
 
 # Varimax-specific functions
-# ---------------------------
+# ---------------------------------------------------------
 
 # Computes the value of the Varimax objective
 # output: Varimax objective
@@ -232,14 +233,14 @@ varimax = function(U, convergence="gradient", eps=1e-05,
   n = nrow(U)
   k = ncol(U)
   if (k<2) {return(U)}
-  if (convergence != "gradient" & convergence != "objective")
+  if (convergence!="gradient" & convergence!="objective")
   {
     stop("Convergence criterion unrecognized. Must be one of {\"objective\",\"gradient\"}")
   }
   
   # Helper function for computing objective at most once per iteration
   obj = NULL
-  get_obj = function(Z)
+  get_obj = function(Z, ...)
   {
     if (!is.null(obj)) {return(obj)}
     return(varimax_objective(Z, ...))
@@ -260,7 +261,7 @@ varimax = function(U, convergence="gradient", eps=1e-05,
     # Print progress
     if (verbose)
     {
-      obj = get_obj(Z)
+      obj = get_obj(Z, ...)
       sprintf("Iter %i: V=%e",i,obj) %>% print
     }
     
@@ -269,8 +270,8 @@ varimax = function(U, convergence="gradient", eps=1e-05,
     dpast = d
     if (convergence == "objective")
     {
-      d = get_obj(Z)
-      if (max(d/dpast,dpast/d)<1+eps) {converged=T}
+      d = get_obj(Z, ...)
+      if (max(abs(d/dpast),abs(dpast/d))<1+eps) {converged=T}
     } else {
       # Gradient
       d = sum(s$d)
@@ -335,7 +336,7 @@ varimax_rotate = function(pcs, pairwise=F, ...) {
 
 
 # Entromin2-specific functions
-# ----------------------------
+# ---------------------------------------------------------
 
 # Computes the value of the Entromin2 objective
 # output: Entromin2 objective
@@ -344,7 +345,6 @@ entromin2_objective = function(U, R=NULL, drop_const=F) {
   # R: optional rotation matrix to apply to U
   # drop_const: T to drop constant terms from the objective; otherwise F
   
-  k = ncol(U)
   if (is.null(R))
   {
     Z = U
@@ -352,7 +352,10 @@ entromin2_objective = function(U, R=NULL, drop_const=F) {
     Z = U %*% R
   }
   const = 0
-  if (drop_const) {const=3/2*k}
+  if (!drop_const)
+  {
+    const = 3/2 * ncol(U)
+  }
   return(sum(Z^6/2 - 2*Z^4) + const)
 }
 
@@ -370,15 +373,15 @@ entromin2 = function(U, convergence="gradient", eps=1e-5,
   
   n = nrow(U)
   k = ncol(U)
-  if (k < 2) { return(U) }
-  if (convergence != "gradient" & convergence != "objective")
+  if (k<2) {return(U)}
+  if (convergence!="gradient" & convergence!="objective")
   {
     stop("Convergence criterion unrecognized. Must be one of {\"objective\",\"gradient\"}")
   }
   
   # Helper function for computing objective at most once per iteration
   obj = NULL
-  get_obj = function(Z)
+  get_obj = function(Z, ...)
   {
     if (!is.null(obj)) {return(obj)}
     return(entromin2_objective(Z, ...))
@@ -399,7 +402,7 @@ entromin2 = function(U, convergence="gradient", eps=1e-5,
     # Print progress
     if (verbose)
     {
-      obj = get_obj(Z)
+      obj = get_obj(Z, ...)
       sprintf("Iter %i: H2=%.5f",i,obj) %>% print
     }
     
@@ -408,8 +411,8 @@ entromin2 = function(U, convergence="gradient", eps=1e-5,
     d_past = d
     if (convergence == "objective")
     {
-      d = get_obj(Z)
-      if (max(d/d_past,d_past/d)<1+eps) {converged=T}
+      d = get_obj(Z, ...)
+      if (max(abs(d/d_past),abs(d_past/d))<1+eps) {converged=T}
     } else {
       # Gradient
       d = sum(s$d)
@@ -477,7 +480,7 @@ entromin2_rotate = function(pcs, pairwise=F, ...) {
 
 
 # Entromin-specific functions
-# ---------------------------
+# ---------------------------------------------------------
 
 # Computes the value of the Entromin objective
 # output: Entromin objective

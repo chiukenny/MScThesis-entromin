@@ -1,13 +1,14 @@
-# This file implements all other functions (helper, plotting, etc.)
+# This file implements all other functions (helper,
+# plotting, etc.)
 
 # Some plotting code is based on code from
 # https://github.com/RoheLab/vsp-paper
-# -----------------------------------------------------------------
+# ---------------------------------------------------------
 
 
 
 # Utility
-# ---------------------------
+# ---------------------------------------------------------
 
 # Rotates a matrix randomly
 # output: rotated matrix
@@ -113,7 +114,7 @@ save_stats = function(X, eps=1e-5, drop_const=F) {
 
 
 # Plotting
-# ---------------------------
+# ---------------------------------------------------------
 
 # Plot red axes and subset of points
 plot_pair = function(X, samples=NULL, ...)

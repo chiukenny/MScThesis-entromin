@@ -9,7 +9,6 @@
 set.seed(1)
 
 rm(list=ls())
-
 source("functions/dataset.R")
 source("functions/orth_rotation.R")
 source("functions/util.R")
@@ -36,7 +35,7 @@ verbose   = F    # Print intermediate progress
 
 
 
-# Simulate datasets
+# Sparsity analysis
 # ---------------------------------------------------------
 
 # Probabilities of zero

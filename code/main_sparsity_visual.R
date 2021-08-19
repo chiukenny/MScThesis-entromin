@@ -6,8 +6,8 @@
 set.seed(1)
 
 library(latex2exp)
-rm(list=ls())
 
+rm(list=ls())
 source("functions/dataset.R")
 source("functions/orth_rotation.R")
 source("functions/util.R")
@@ -50,7 +50,7 @@ pcs = bigPCA(A, k, tau, normalization, centering)
 
 
 
-# Factor rotation methods
+# Sparsity analysis
 # ---------------------------------------------------------
 
 # Varimax

@@ -7,8 +7,8 @@ set.seed(1)
 
 library(data.table)
 library(Matrix)
-rm(list=ls())
 
+rm(list=ls())
 source("functions/dataset.R")
 source("functions/orth_rotation.R")
 source("functions/util.R")
