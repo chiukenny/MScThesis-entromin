@@ -76,6 +76,17 @@ get_stats(pcs$U %*% entr_factors$Rz, 1e-4)
 if (save_plots)
 {
   p0s = format(p0, digits=2)
+  
+  # Highlight the points in the streak
+  # The specified slopes were found through trial and error
+  if (p0 == 0.3) {
+    sparse_ind = which_sparse(pcs$U, -0.2, eps=1e-1)
+  } else if (p0 == 0.4) {
+    sparse_ind = which_sparse(pcs$U, -0.1, eps=1e-1)
+  } else if (p0 == 0.5) {
+    sparse_ind = which_sparse(pcs$U, 0.05, eps=1e-1)
+  } else {sparse_ind = NULL}
+  
   if (first_row)
   {
     # Adjust height for first row
@@ -86,13 +97,17 @@ if (save_plots)
     Ulim = max(abs(range(pcs$U)))
     Zlim = max(abs(range(rbind(var_factors$Z, entr_factors$Z, entr2_factors$Z))))
     
-    plot_pair(rotate_random(pcs$U), xlim=c(-Ulim,Ulim), ylim=c(-Ulim,Ulim),
+    plot_pair(rotate_random(pcs$U), highlight=sparse_ind,
+              xlim=c(-Ulim,Ulim), ylim=c(-Ulim,Ulim),
               main=TeX("Random"), cex.main=1.9)
-    plot_pair(var_factors$Z, xlim=c(-Zlim,Zlim), ylim=c(-Zlim,Zlim),
+    plot_pair(var_factors$Z, highlight=sparse_ind,
+              xlim=c(-Zlim,Zlim), ylim=c(-Zlim,Zlim),
               main=TeX("Varimax"), cex.main=1.9)
-    plot_pair(entr2_factors$Z, xlim=c(-Zlim,Zlim), ylim=c(-Zlim,Zlim),
+    plot_pair(entr2_factors$Z, highlight=sparse_ind,
+              xlim=c(-Zlim,Zlim), ylim=c(-Zlim,Zlim),
               main=TeX("Entromin$_2$"), cex.main=1.9)
-    plot_pair(entr_factors$Z, xlim=c(-Zlim,Zlim), ylim=c(-Zlim,Zlim),
+    plot_pair(entr_factors$Z, highlight=sparse_ind,
+              xlim=c(-Zlim,Zlim), ylim=c(-Zlim,Zlim),
               main=TeX("Entromin"), cex.main=1.9)
     dev.off()
   } else {
@@ -103,10 +118,14 @@ if (save_plots)
     Ulim = max(abs(range(pcs$U)))
     Zlim = max(abs(range(rbind(var_factors$Z, entr_factors$Z, entr2_factors$Z))))
     
-    plot_pair(rotate_random(pcs$U), xlim=c(-Ulim,Ulim), ylim=c(-Ulim,Ulim))
-    plot_pair(var_factors$Z, xlim=c(-Zlim,Zlim), ylim=c(-Zlim,Zlim))
-    plot_pair(entr2_factors$Z, xlim=c(-Zlim,Zlim), ylim=c(-Zlim,Zlim))
-    plot_pair(entr_factors$Z, xlim=c(-Zlim,Zlim), ylim=c(-Zlim,Zlim))
+    plot_pair(rotate_random(pcs$U), highlight=sparse_ind
+              , xlim=c(-Ulim,Ulim), ylim=c(-Ulim,Ulim))
+    plot_pair(var_factors$Z, highlight=sparse_ind
+              , xlim=c(-Zlim,Zlim), ylim=c(-Zlim,Zlim))
+    plot_pair(entr2_factors$Z, highlight=sparse_ind
+              , xlim=c(-Zlim,Zlim), ylim=c(-Zlim,Zlim))
+    plot_pair(entr_factors$Z, highlight=sparse_ind
+              , xlim=c(-Zlim,Zlim), ylim=c(-Zlim,Zlim))
     dev.off()
   }
 }

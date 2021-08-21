@@ -116,8 +116,15 @@ save_stats = function(X, eps=1e-5, drop_const=F) {
 # Plotting
 # ---------------------------------------------------------
 
+# Helper function to identify the points in a radial streak
+which_sparse = function(X, slope, eps=1e-5)
+{
+  return(X[,2]/X[,1]>slope-eps & X[,2]/X[,1]<slope+eps)
+}
+
+
 # Plot red axes and subset of points
-plot_pair = function(X, samples=NULL, ...)
+plot_pair = function(X, samples=NULL, highlight=NULL, ...)
 {
   if (is.null(samples))
   {
@@ -127,9 +134,15 @@ plot_pair = function(X, samples=NULL, ...)
   y = X[samples,2]
   
   plot(NULL, xlab="", ylab="", xaxt="n", yaxt="n", ...)
-  abline(h=0, col="red", ...)
-  abline(v=0, col="red", ...)
-  points(x, y, pch=".", cex=1.5, ...)
+  abline(h=0, col="grey", ...)
+  abline(v=0, col="grey", ...)
+  if (!is.null(highlight))
+  {
+    points(x[!highlight], y[!highlight], pch=".", cex=2, ...)
+    points(x[highlight], y[highlight], pch=".", cex=3, col="red", ...)
+  } else {
+    points(x, y, pch=".", cex=2, ...)
+  }
 }
 
 
