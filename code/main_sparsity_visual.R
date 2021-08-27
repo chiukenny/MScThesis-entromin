@@ -89,7 +89,7 @@ if (save_plots)
   
   if (first_row)
   {
-    # Adjust height for first row
+    # Adjust height for first row to include labels
     png(file=paste(plot_dest,p0s,"norm_comparison.png",sep=""),
         height=p_height+0.35, width=p_width, units="in", res=200)
     par(mfrow=c(1,4), mai=c(0.05,0.05,0.4,0.05))
@@ -118,14 +118,14 @@ if (save_plots)
     Ulim = max(abs(range(pcs$U)))
     Zlim = max(abs(range(rbind(var_factors$Z, entr_factors$Z, entr2_factors$Z))))
     
-    plot_pair(rotate_random(pcs$U), highlight=sparse_ind
-              , xlim=c(-Ulim,Ulim), ylim=c(-Ulim,Ulim))
-    plot_pair(var_factors$Z, highlight=sparse_ind
-              , xlim=c(-Zlim,Zlim), ylim=c(-Zlim,Zlim))
-    plot_pair(entr2_factors$Z, highlight=sparse_ind
-              , xlim=c(-Zlim,Zlim), ylim=c(-Zlim,Zlim))
-    plot_pair(entr_factors$Z, highlight=sparse_ind
-              , xlim=c(-Zlim,Zlim), ylim=c(-Zlim,Zlim))
+    plot_pair(rotate_random(pcs$U), highlight=sparse_ind,
+              xlim=c(-Ulim,Ulim), ylim=c(-Ulim,Ulim))
+    plot_pair(var_factors$Z, highlight=sparse_ind,
+              xlim=c(-Zlim,Zlim), ylim=c(-Zlim,Zlim))
+    plot_pair(entr2_factors$Z, highlight=sparse_ind,
+              xlim=c(-Zlim,Zlim), ylim=c(-Zlim,Zlim))
+    plot_pair(entr_factors$Z, highlight=sparse_ind,
+              xlim=c(-Zlim,Zlim), ylim=c(-Zlim,Zlim))
     dev.off()
   }
 }
